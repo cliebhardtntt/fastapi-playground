@@ -3,7 +3,7 @@ Invoke-WebRequest http://localhost:8000 -UseBasicParsing
 Write-Output "Req1 end: $(Get-Date)"
 
 $jobs = 1..1 | ForEach-Object {
-  Start-Job -ScriptBlock { Invoke-WebRequest http://localhost:8000/largefib -UseBasicParsing }
+  Start-Job -ScriptBlock { Invoke-WebRequest http://localhost:8000/slow -UseBasicParsing }
 }
 
 Start-Sleep 1 # Make sure that the other requests have started
