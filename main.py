@@ -29,19 +29,19 @@ def slow_numpy(n):
     return r[0]
 
 @app.get("/")
-async def root():
+def root():
     return {"message": "Hello World"}
 
 @app.get("/fib")    
 async def fib():
-    return {"message": str(fib_numpy(2000))}
+    return {"message": str(fib_iter(2000))}
 
 @app.get("/largefib")    
-async def largefib():
-    return {"message": str(fib_numpy(20000000000000000000000000) % 10000)}
+def largefib():
+    return {"message": str(fib_iter(20000000000000) % 10000)}
 
 @app.get("/slow")    
-async def slow():
+def slow():
     slow_numpy(100000)
     return {"message": "done"}
     
