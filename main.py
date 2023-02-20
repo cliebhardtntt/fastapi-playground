@@ -1,24 +1,15 @@
 from fastapi import FastAPI
 import numpy as np
+import multiprocessing
+import threading
 
 app = FastAPI()
-
-def fib_naive(number):
-    if number == 0:
-        return 0
-    if number == 1:
-        return 1
-    return fib_naive(number - 1) + fib_naive(number - 2)
     
 def fib_iter(n):
     a, b = 0, 1
     for i in range(0, n):
         a, b = b, a + b
     return a
-    
-def fib_numpy(n):
-    F = np.matrix([[1, 1], [1, 0]])
-    return (F ** (n - 1))[0, 0]
     
 def slow_numpy(n):
     a = np.zeros(n)
@@ -30,15 +21,21 @@ def slow_numpy(n):
 
 @app.get("/")
 def root():
-    return {"message": "Hello World"}
-
-@app.get("/fib")    
-async def fib():
-    return {"message": str(fib_iter(2000))}
+    #print("root PID " + str(multiprocessing.Process.pid))
+    print("root TID " + str(threading.get_ident()))
+    print("root: Before res")
+    res = "Hello World"
+    print("root: After res")
+    return {"message": res}
 
 @app.get("/largefib")    
 def largefib():
-    return {"message": str(fib_iter(20000000000000) % 10000)}
+    print("largefib TID " + str(threading.get_ident()))
+    print("largefib" + str(multiprocessing.Process.pid))
+    print("largefib: Before res")
+    res = str(fib_iter(20000000000000) % 10000)
+    print("largefib: After res")
+    return {"message": res}
 
 @app.get("/slow")    
 def slow():
